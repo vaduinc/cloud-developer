@@ -2,8 +2,10 @@ import { Router, Request, Response } from 'express';
 import { FeedItem } from '../models/FeedItem';
 import { requireAuth } from '../../users/routes/auth.router';
 import * as AWS from '../../../../aws';
+import { config } from '../../../../config/config';
 
 const router: Router = Router();
+const axios = require('axios').default;
 
 // Get all feed items
 router.get('/', async (req: Request, res: Response) => {
@@ -16,15 +18,68 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(items);
 });
 
-//@TODO
-//Add an endpoint to GET a specific resource by Primary Key
+// Get one feed item by ID
+router.get('/:id', async (req: Request, res: Response) => {
+    let { id } = req.params;
+    try{
+        const item = await FeedItem.findByPk(id);
+        if (!item){
+            return res.status(404).send({ message: 'No record with id ' + id });
+        }
+        res.send(item);
+    }catch(error){
+        return res.status(500).send({ message: 'Something when wrong when searching for id ' + id });
+    }
+});
+
+/**
+ * Process the specific URL image.
+ * Forward request to Image Process server and return the
+ * response to the caller.
+ * It does NOT required authentication.
+ */
+router.post('/process-image/transform', async (req: Request, res: Response) => {
+    let { image_url } = req.body;
+    axios({
+        method: 'get',
+        url: config.image_api.host + 'filteredimage?image_url=' + image_url,
+        responseType: 'stream'
+      })
+        .then(function(response: any) {
+          response.data.pipe(res)
+      });
+
+});
 
 // update a specific resource
 router.patch('/:id', 
     requireAuth, 
     async (req: Request, res: Response) => {
         //@TODO try it yourself
-        res.send(500).send("not implemented")
+        // res.send(500).send("not implemented")
+        let { id } = req.params;
+        const caption = req.body.caption;
+        const fileName = req.body.url;
+    
+        // check Caption is valid
+        if (!caption) {
+            return res.status(400).send({ message: 'Caption is required or malformed' });
+        }
+    
+        // check Filename is valid
+        if (!fileName) {
+            return res.status(400).send({ message: 'File url is required' });
+        }
+
+        try {
+            const result = await FeedItem.update(
+              { caption: caption, url: fileName },
+              { where: { id: id } }
+            )
+            res.send(result);
+          } catch (er) {
+            return res.status(500).send({ message: 'Something when wrong when updating record id ' + id });
+          }
 });
 
 

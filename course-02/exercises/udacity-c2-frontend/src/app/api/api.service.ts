@@ -24,9 +24,15 @@ export class ApiService {
     alert(error.message);
   }
 
+
   setAuthToken(token) {
     this.httpOptions.headers = this.httpOptions.headers.append('Authorization', `jwt ${token}`);
     this.token = token;
+  }
+
+  proccessThisImage(endpoint,body): Observable<Blob> {
+    const url = `${API_HOST}${endpoint}`;
+    return this.http.post(url, body, {responseType: "blob"});
   }
 
   get(endpoint): Promise<any> {

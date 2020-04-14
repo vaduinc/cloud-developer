@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FeedItem, feedItemMocks } from '../models/feed-item.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ApiService } from '../../api/api.service';
 
@@ -24,6 +24,16 @@ export class FeedProviderService {
     const feed = [res, ...this.currentFeed$.value];
     this.currentFeed$.next(feed);
     return res;
+  }
+
+  /**
+   * This was originally created to process each of the S3 images.
+   * However, since the signed URL didn't work I left the functionality here
+   * to send and process any public accesable URL image  
+   */
+  public proccessThisImage(imageURL: string): Observable<Blob>{
+    const url = '/feed/process-image/transform' ;
+    return this.api.proccessThisImage(url, {"image_url": imageURL});
   }
 
 }
