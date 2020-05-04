@@ -16,6 +16,12 @@ before_install:
   - sudo mv ./kubectl /usr/local/bin/kubectl
 
 
-
 install:
   - docker-compose -f course-03/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push tatoo100/reverseproxy
+  - docker push tatoo100/udacity-frontend
+  - docker push tatoo100/udacity-restapi-feed
+  - docker push tatoo100/udacity-restapi-user
