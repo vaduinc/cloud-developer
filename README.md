@@ -1,5 +1,7 @@
 # cloud-developer
-content for Udacity's cloud developer nanodegree
-Project 2
 Jaime Valencia
-Full documentation udacity-jaime-valencia-p2.pdf
+content for Udacity's cloud developer nanodegree
+
+- Project 2 documentation `udacity-jaime-valencia-p2.pdf`
+
+- Project 3 documentation `udacity-jaime-valencia-p3.pdf`
