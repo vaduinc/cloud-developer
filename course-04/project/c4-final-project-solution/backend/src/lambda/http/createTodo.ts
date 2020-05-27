@@ -2,6 +2,7 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import * as AWS  from 'aws-sdk'
 import * as uuid from 'uuid'
+import { getUserId } from '../utils'
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -10,7 +11,7 @@ const todosTable = process.env.TODOS_TABLE
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   console.log('Processing event: ', event)
   const itemId = uuid.v4()
-  const userId= 'mockUser' // TODO get this from JWT later
+  const userId= getUserId(event)
 
   const parsedBody: CreateTodoRequest = JSON.parse(event.body)
   
@@ -31,7 +32,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      newItem
+      item: newItem
     })
   }
 }

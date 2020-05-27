@@ -21,6 +21,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:PutItem
         - dynamodb:GetItem
@@ -35,6 +36,9 @@ provider:
 
 functions:
 
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
   # TODO: Configure this function
   GetTodos:
     handler: src/lambda/http/getTodos.handler
@@ -42,6 +46,8 @@ functions:
       - http:
           method: get
           path: todos
+          cors: true
+          authorizer: Auth
 
   # TODO: Configure this function
   CreateTodo:
@@ -50,6 +56,8 @@ functions:
       - http:
           method: post
           path: todos
+          cors: true
+          authorizer: Auth
 
   # TODO: Configure this function
   DeleteTodo:
@@ -58,6 +66,8 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
+          cors: true
+          authorizer: Auth
 
   # TODO: Configure this function
   UpdateTodo:
@@ -66,9 +76,32 @@ functions:
       - http:
           method: patch
           path: todos/{todoId}
+          cors: true
+          authorizer: Auth
+
+  # TODO: Configure this function
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          method: post
+          path: todos/{todoId}/attachment
+          cors: true
+          authorizer: Auth
 
 resources:
   Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
