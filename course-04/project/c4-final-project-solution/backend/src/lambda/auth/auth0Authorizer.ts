@@ -1,6 +1,5 @@
 import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda'
 import 'source-map-support/register'
-
 import { verify, decode } from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger'
 import Axios from 'axios'
@@ -70,7 +69,6 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
     throw new Error('mismatch')
   }
 
-  //Certificate
   const cert = '-----BEGIN CERTIFICATE-----\n' + jwk.x5c[0] + '\n-----END CERTIFICATE-----'
 
   return verify(
