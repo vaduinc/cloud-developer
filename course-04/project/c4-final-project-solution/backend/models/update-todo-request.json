@@ -3,19 +3,23 @@
     "title": "updateTodo",
     "type": "object",
     "properties": {
-      "name": {
-        "type": "string"
-      },
-      "dueDate": {
-        "type": "string"
-      },
+      "name": { "$ref": "#/definitions/non-empty-string" },
+      "dueDate": { "$ref": "#/definitions/non-empty-string" },
       "done": {
         "type": "boolean"
       }
     },
+    "anyOf": [
+      { "required": ["name"] },
+      { "required": ["dueDate"] }
+    ],
+    "definitions": {
+        "non-empty-string": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
     "required": [
-      "name",
-      "dueDate",
       "done"
     ],
     "additionalProperties": false

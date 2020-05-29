@@ -8,8 +8,13 @@ plugins:
   - serverless-iam-roles-per-function
 
 provider:
+
   name: aws
   runtime: nodejs10.x
+
+  tracing:
+    lambda: true
+    apiGateway: true
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
@@ -39,6 +44,13 @@ functions:
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+    iamRoleStatements:  
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   GetTodos:
@@ -54,6 +66,12 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   CreateTodo:
@@ -75,6 +93,12 @@ functions:
         Action:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   DeleteTodo:
@@ -90,6 +114,12 @@ functions:
         Action:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   UpdateTodo:
@@ -111,6 +141,12 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -130,6 +166,12 @@ functions:
         Action:
           - s3:PutObject
         Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - "*"
 
 resources:
   Resources:
