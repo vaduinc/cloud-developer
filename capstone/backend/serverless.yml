@@ -1,0 +1,121 @@
+service:
+  name: serverless-newsletter-app
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    NEWSLETTER_TABLE: Newsletter-${self:provider.stage}
+    INDEX_NAME: GSI
+    ATTACH_S3_BUCKET: serverless-jv-newsletter-attch-${self:provider.stage}
+    SIGNED_URL_EXPIRATION: 300
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NEWSLETTER_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NEWSLETTER_TABLE}/index/${self:provider.environment.INDEX_NAME}
+
+functions:
+  GetNewsletters:
+    handler: src/lambda/http/getNewsletters.handler
+    events:
+      - http:
+          method: get
+          path: newsletters
+          cors: true
+
+  CreateNewsletter:
+    handler: src/lambda/http/createNewsletter.handler
+    events:
+      - http:
+          method: post
+          path: newsletters
+          cors: true        
+
+  GetUserProfile:
+    handler: src/lambda/http/getUserProfile.handler
+    events:
+      - http:
+          method: get
+          path: userprofile
+          cors: true
+
+  UpdateUserProfile:
+    handler: src/lambda/http/updateUserProfile.handler
+    events:
+      - http:
+          method: post
+          path: userprofile
+          cors: true
+
+  CreateSubscription:
+    handler: src/lambda/http/createSubscription.handler
+    events:
+      - http:
+          method: post
+          path: newsletters/subscription
+          cors: true
+
+  GetUserSubscriptions:
+    handler: src/lambda/http/getUserSubscriptions.handler
+    events:
+      - http:
+          method: get
+          path: newsletters/subscription
+          cors: true
+
+resources:
+  Resources:
+    NewsletterTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S
+          - AttributeName: SK
+            AttributeType: S
+          - AttributeName: GSI
+            AttributeType: S  
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.NEWSLETTER_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.INDEX_NAME}
+            KeySchema:
+              - AttributeName: GSI
+                KeyType: HASH
+              - AttributeName: SK
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL # What attributes will be copied to an index
