@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import * as AWS  from 'aws-sdk'
-// import { getUserId } from '../utils'
+import { getUserId } from '../utils'
 // import { createLogger } from '../../utils/logger'
 // import { getAllTodos } from '../../businessLogic/todos'
 
@@ -14,7 +14,8 @@ const GSIName = process.env.INDEX_NAME
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // logger.info('Processing event: ', event)
   // const allTodos = await getAllTodos(getUserId(event))
-  const userId = '1234'
+  // const userId = '1234'
+  const userId= getUserId(event)
 
   const result = await docClient
       .query({
