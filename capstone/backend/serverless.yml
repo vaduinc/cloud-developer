@@ -51,6 +51,16 @@ provider:
       Action:
         - s3:PutObject
       Resource: arn:aws:s3:::${self:provider.environment.ATTACH_S3_BUCKET}/*
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+        - "ses:SendRawEmail"
+      Resource:
+        - "*"
+      Condition:
+        StringEquals:
+          ses:FromAddress:
+            - "jaime.vadu@gmail.com"
 
 functions:
   GetNewsletters:
