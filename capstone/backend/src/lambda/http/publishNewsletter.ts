@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { getUserId } from '../utils'
-import { saveSubscription } from '../../serviceLayer/SubscriptionService'
+import { publishNewsletter , getSignedURL} from '../../serviceLayer/PublicationService'
 // import { createLogger } from '../../utils/logger'
 
 //const logger = createLogger ('Get-All-Todo')
@@ -11,8 +11,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const userId= getUserId(event)
   const parsedBody = JSON.parse(event.body)
 
-  const saveItem = await saveSubscription(parsedBody, userId)
-
+  const saveItem = await publishNewsletter(parsedBody, userId)
+  const signedUrl =  await getSignedURL(saveItem.publicationId)
   
   return {
     statusCode: 201,
@@ -20,7 +20,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      data: saveItem
+      data: saveItem,
+      signedURL: signedUrl
     })
   }
 }

@@ -46,6 +46,10 @@ provider:
       Action:
         - dynamodb:Query
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NEWSLETTER_TABLE}/index/${self:provider.environment.INDEX_NAME}
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: arn:aws:s3:::${self:provider.environment.ATTACH_S3_BUCKET}/*
 
 functions:
   GetNewsletters:
@@ -96,6 +100,14 @@ functions:
           path: newsletters/subscription
           cors: true
 
+  PublishNewsletter:
+    handler: src/lambda/http/publishNewsletter.handler
+    events:
+      - http:
+          method: post
+          path: newsletters/publication
+          cors: true
+
 resources:
   Resources:
     NewsletterTable:
@@ -124,3 +136,36 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
+
+    AttachmentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.ATTACH_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: MyPolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.ATTACH_S3_BUCKET}/*'
+        Bucket: !Ref AttachmentsBucket

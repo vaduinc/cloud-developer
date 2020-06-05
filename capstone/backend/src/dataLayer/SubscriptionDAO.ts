@@ -5,7 +5,7 @@ import { createLogger } from '../utils/logger'
 
 const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)
-const logger = createLogger('USER-DAO')
+const logger = createLogger('SUBSCRIPTION-DAO')
 
 const USER_KEY =  'user_'
 const NEWSLETTER_KEY = 'newsltt_'
