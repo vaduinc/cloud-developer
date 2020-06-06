@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const newsletterId = event.pathParameters.newsletterId
   
-  const item = await getSubscriptionsByNewsletterId(newsletterId)
+  const items = await getSubscriptionsByNewsletterId(newsletterId)
 
   return {
     statusCode: 200,
@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      data: item
+      data: items
     })
   }
 }
