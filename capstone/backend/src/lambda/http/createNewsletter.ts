@@ -1,46 +1,29 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import * as AWS  from 'aws-sdk'
-import * as uuid from 'uuid'
 import { getUserId } from '../utils'
-// import { createLogger } from '../../utils/logger'
-// import { getAllTodos } from '../../businessLogic/todos'
+import { saveNewsletter } from '../../serviceLayer/NewsletterService'
+import { CreateNewsletterRequest } from '../../requests/CreateNewsletterRequest'
+import { createLogger } from '../../utils/logger'
 
-//const logger = createLogger ('Get-All-Todo')
-
-const docClient = new AWS.DynamoDB.DocumentClient()
-const newsletterTable = process.env.NEWSLETTER_TABLE
+const logger = createLogger ('Create-Newsletter')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  // logger.info('Processing event: ', event)
-  // const allTodos = await getAllTodos(getUserId(event))
-  //const userId = '1234'
-  const userId= getUserId(event)
-  const newsletterId = uuid.v4()
-  const parsedBody = JSON.parse(event.body)
 
-  // TODO check it is not already subscribed
-
-  const newItem = {
-    PK: `user_${userId}`,
-    SK: `newsltt_${newsletterId}`,
-    GSI: 'meta',
-    shortDesc: parsedBody.shortDesc,
-    longDesc: parsedBody.longDesc
-  }
-
-  await docClient.put({
-    TableName: newsletterTable,
-    Item: newItem
-  }).promise()
+  logger.info('Processing event CreateNewsletterRequest: ', event)
   
+  const userId= getUserId(event)
+  
+  // TODO check it is not already subscribed
+  const parsedBody: CreateNewsletterRequest = JSON.parse(event.body)
+  const saveItem = await saveNewsletter(parsedBody, userId)
+
   return {
-    statusCode: 201,
+    statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      data: newItem
+      data: saveItem
     })
   }
 }

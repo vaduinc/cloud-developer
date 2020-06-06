@@ -48,6 +48,32 @@ export class SubscriptionDAO {
       return items as Subscription[]
     }
 
+    async getSubscriptionsByNewsletterId (newsletterId: string): Promise<Subscription[]>{
+
+      logger.info('Getting getSubscriptionsByNewsletterId ' + newsletterId)
+
+      const result = await this.docClient
+      .query({
+        TableName: this.newsletterTable,
+        KeyConditionExpression: 'PK = :pk and begins_with(SK, :sk)',
+        ExpressionAttributeValues: {
+          ':pk': `${NEWSLETTER_KEY}${newsletterId}`,
+          ':sk': SUBSCRIPTION_KEY
+        }
+      })
+      .promise()
+
+      const items  = result.Items.map((subs) => { 
+        return {
+                "userId": subs.GSI.replace(USER_KEY,""), 
+                "enrolled": subs.enrolled,
+                "subscriptionId": subs.SK.replace(SUBSCRIPTION_KEY,""),
+                "newsletterId": newsletterId
+               }
+      })
+
+      return items as Subscription[]
+    }    
 
     async createSubscription (subscription: Subscription): Promise<Subscription> {
 

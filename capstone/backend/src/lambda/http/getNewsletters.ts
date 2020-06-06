@@ -1,31 +1,16 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import * as AWS  from 'aws-sdk'
+import { createLogger } from '../../utils/logger'
+import { getUserNewsletters } from '../../serviceLayer/NewsletterService'
 import { getUserId } from '../utils'
-// import { createLogger } from '../../utils/logger'
-// import { getAllTodos } from '../../businessLogic/todos'
 
-//const logger = createLogger ('Get-All-Todo')
-
-const docClient = new AWS.DynamoDB.DocumentClient()
-const newsletterTable = process.env.NEWSLETTER_TABLE
+const logger = createLogger ('Create-Newsletter')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  // logger.info('Processing event: ', event)
-  // const allTodos = await getAllTodos(getUserId(event))
-  // const userId = '1234'
-  const userId= getUserId(event)
 
-  const result = await docClient
-      .query({
-        TableName: newsletterTable,
-        KeyConditionExpression: 'PK = :pk and begins_with(SK, :sk)',
-        ExpressionAttributeValues: {
-          ':pk': `user_${userId}`,
-          ':sk': 'newsltt'
-        }
-      })
-      .promise()
+  logger.info('Processing event getUserNewsletters: ', event)
+
+  const items = await getUserNewsletters(getUserId(event))
 
   return {
     statusCode: 200,
@@ -33,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      data: result.Items
+      data: items
     })
   }
 }

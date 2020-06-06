@@ -111,6 +111,30 @@ functions:
           path: newsletters/subscription
           cors: true
 
+  GetSubscriptionsByNewsletterId:
+    handler: src/lambda/http/getSubscriptionsByNewsletterId.handler
+    events:
+      - http:
+          method: get
+          path: newsletters/{newsletterId}/subscription
+          cors: true
+
+  GetUserPublications:
+    handler: src/lambda/http/getUserPublications.handler
+    events:
+      - http:
+          method: get
+          path: newsletters/publication
+          cors: true
+
+  GetPublication:
+    handler: src/lambda/http/getPublication.handler
+    events:
+      - http:
+          method: get
+          path: newsletters/{newsletterId}/publication/{publicationId}
+          cors: true
+
   PublishNewsletter:
     handler: src/lambda/http/publishNewsletter.handler
     events:

@@ -5,6 +5,16 @@ import * as uuid from 'uuid'
 
 const publicationDAO = new PublicationDAO()
 
+export async function getUserPublications(userId: string): Promise<Publication[]>{
+    
+    return await publicationDAO.getUserPublications(userId)
+}
+
+export async function getPublicationById(newsletterId: string, publicationId: string): Promise<Publication>{
+    
+    return await publicationDAO.getPublicationById(newsletterId, publicationId)
+}
+
 export async function publishNewsletter(createPublicationRequest: CreatePublicationRequest, userId: string): Promise<Publication>{
     
     return await publicationDAO.createPublication({
@@ -12,11 +22,10 @@ export async function publishNewsletter(createPublicationRequest: CreatePublicat
         newsletterId: createPublicationRequest.newsletterId,
         publicationId: uuid.v4()
     })
-   
 }
 
-export async function getSignedURL(publicationId: string): Promise<string>{
+export async function getSignedURL(newsletterId: string, publicationId: string): Promise<string>{
 
-    return await publicationDAO.getUploadUrl(publicationId)
+    return await publicationDAO.getUploadUrl(newsletterId, publicationId)
 
 }

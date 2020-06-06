@@ -10,6 +10,12 @@ export async function getUserSubscripions(userId: string): Promise<Subscription[
     return await subscriptionDAO.getUserSubscriptions(userId)
 }
 
+export async function getSubscriptionsByNewsletterId(newsletterId: string): Promise<Subscription[]>{
+    
+    return await subscriptionDAO.getSubscriptionsByNewsletterId(newsletterId)
+}
+
+
 export async function saveSubscription(createSubscriptionRequest: CreateSubscriptionRequest, userId: string): Promise<Subscription>{
     
         return await subscriptionDAO.createSubscription({

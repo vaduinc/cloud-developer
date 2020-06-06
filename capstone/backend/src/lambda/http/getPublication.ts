@@ -1,16 +1,16 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { getUserId } from '../utils'
-import { getUserSubscripions } from '../../serviceLayer/SubscriptionService'
+import { getPublicationById } from '../../serviceLayer/PublicationService'
 import { createLogger } from '../../utils/logger'
 
-const logger = createLogger ('Create-Newsletter')
+const logger = createLogger ('Get-Pubication-By-Id')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  logger.info('Processing event getPublicationById: ', event)
+  const publicationId = event.pathParameters.publicationId
+  const newsletterId = event.pathParameters.newsletterId
   
-  logger.info('Processing event getUserSubscripions: ', event)
-
-  const items = await getUserSubscripions(getUserId(event))
+  const item = await getPublicationById(newsletterId,publicationId)
 
   return {
     statusCode: 200,
@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      data: items
+      data: item
     })
   }
 }

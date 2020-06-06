@@ -73,11 +73,12 @@ export class UserDAO {
           "PK": `${PK}${userProfile.userId}`,
           "SK": SK
         },
-        UpdateExpression: "set #n = :name, #l = :last, email = :email",
+        UpdateExpression: "set #n = :name, #l = :last, email = :email, GSI = :gsi",
         ExpressionAttributeValues: {
           ":name" : userProfile.name,
           ":last" : userProfile.last,
-          ":email" : userProfile.email
+          ":email" : userProfile.email,
+          ":gsi" : GSI
         },
         ExpressionAttributeNames: {
           "#n" : "name",
