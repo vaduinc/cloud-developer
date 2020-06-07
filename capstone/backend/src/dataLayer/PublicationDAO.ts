@@ -10,7 +10,7 @@ const logger = createLogger('PUBLICATION-DAO')
 const USER_KEY =  'user_'
 const NEWSLETTER_KEY = 'newsltt_'
 const PUBLICATION_KEY = 'newspublication_'
-const KEY_DIVISION ='---'
+const KEY_DIVISION = process.env.KEY_DIVISION
 
 export class PublicationDAO {
 
@@ -65,7 +65,7 @@ export class PublicationDAO {
      * @param newsletterId
      * @param publicationId
      */
-    async getPublicationById (newsletterId: string, publicationId: string): Promise<Publication>{
+    async getPublicationById (newsletterId: string, publicationId: string): Promise<Publication | {}>{
 
       logger.info('Getting getPublicationById ' + newsletterId + ' : ' + publicationId)
 
@@ -78,6 +78,10 @@ export class PublicationDAO {
         }
       })
       .promise()
+
+      if (!result.Item){
+        return {}
+      }
 
       return {
               "userId": result.Item.GSI.replace(USER_KEY,""), 

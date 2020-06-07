@@ -10,7 +10,7 @@ export async function getUserPublications(userId: string): Promise<Publication[]
     return await publicationDAO.getUserPublications(userId)
 }
 
-export async function getPublicationById(newsletterId: string, publicationId: string): Promise<Publication>{
+export async function getPublicationById(newsletterId: string, publicationId: string): Promise<Publication | {}>{
     
     return await publicationDAO.getPublicationById(newsletterId, publicationId)
 }
