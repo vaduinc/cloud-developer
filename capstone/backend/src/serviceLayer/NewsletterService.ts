@@ -5,6 +5,11 @@ import * as uuid from 'uuid'
 
 const newsletterDAO = new NewsletterDAO()
 
+export async function getAllNewsletters(): Promise<Newsletter[]>{
+    
+    return await newsletterDAO.getAllNewsletters()
+}
+
 export async function getUserNewsletters(userId: string): Promise<Newsletter[]>{
     
     return await newsletterDAO.getUserNewsletters(userId)

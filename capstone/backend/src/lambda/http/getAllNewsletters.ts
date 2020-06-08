@@ -1,16 +1,15 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
-import { getUserNewsletters } from '../../serviceLayer/NewsletterService'
-import { getUserId } from '../utils'
+import { getAllNewsletters } from '../../serviceLayer/NewsletterService'
 
-const logger = createLogger ('Create-Newsletter')
+const logger = createLogger ('Get-ALL-Newsletter')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
-  logger.info('Processing event getUserNewsletters: ', event)
+  logger.info('Processing event getAllNewsletters: ', event)
 
-  const items = await getUserNewsletters(getUserId(event))
+  const items = await getAllNewsletters()
 
   return {
     statusCode: 200,

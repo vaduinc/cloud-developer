@@ -70,12 +70,21 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
     
-  GetNewsletters:
-    handler: src/lambda/http/getNewsletters.handler
+  GetUserNewsletters:
+    handler: src/lambda/http/getUserNewsletters.handler
     events:
       - http:
           method: get
           path: newsletters
+          cors: true
+          authorizer: Auth
+
+  GetAllNewsletters:
+    handler: src/lambda/http/getAllNewsletters.handler
+    events:
+      - http:
+          method: get
+          path: newsletters/all
           cors: true
           authorizer: Auth
 
