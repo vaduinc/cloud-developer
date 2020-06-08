@@ -2,9 +2,7 @@ import { SNSHandler, SNSEvent, S3Event } from 'aws-lambda'
 import 'source-map-support/register'
 import { createLogger } from '../../utils/logger'
 import { send } from '../../utils/emailSender'
-import { getSubscriptionsByNewsletterId } from '../../serviceLayer/SubscriptionService'
-import { getUserProfile } from '../../serviceLayer/UserService'
-import { UserProfile } from '../../models/UserProfile'
+import { getUserProfileByNewsletterId } from '../../serviceLayer/UserService'
 
 const logger = createLogger ('S3-Event-Publish')
 const KEY_DIVISION =process.env.KEY_DIVISION
@@ -37,14 +35,9 @@ async function processS3Event(s3Event: S3Event) {
     logger.info(key)
 
     const newsletterId = key.split(KEY_DIVISION)
+    const usersProfiles = await getUserProfileByNewsletterId(newsletterId[0])
 
-    const subscriptions = await getSubscriptionsByNewsletterId(newsletterId[0])
-    logger.info(subscriptions)
-
-    const users = await subscriptions.map( (sub) => {return sub.userId} )
-    logger.info(users)
-
-    const usersProfiles = await getEmailsFromUsers(users)
+    logger.info(usersProfiles)
     
     await send(usersProfiles, prepareMessage(key), 'Capstone Newsletter')
   }
@@ -62,28 +55,8 @@ function prepareMessage(key: string): string {
   const linkUrl: string = 'https://' + bucketName + '.s3.amazonaws.com/' + key
 
   return `
-            There is a new publication for your newsletter subscription.
+          There is a new publication for your newsletter subscription.
 
-            Click here to see it
-            ${linkUrl}`
-}
-
-/**
- * Returns UserProfile collection calling the persistence storage (DynamoDb)
- * using the userIds coming in the input parameter
- * 
- * @param userIds 
- */
-async function getEmailsFromUsers(userIds: string[]): Promise<UserProfile[]> {
-
-  let userProfile = []
-
-  for (const userId of userIds){
-      const profile = await getUserProfile(userId)
-      userProfile.push(profile)
-  }
-
-  logger.info(userProfile)
-
-  return userProfile
+          Click here to see it
+          ${linkUrl}`
 }
