@@ -37,8 +37,11 @@ export class EditTodo extends React.PureComponent<
   async componentDidMount() {
     try {
       const subscriptions = await getSubscriptionsByNewsletterId(this.props.auth.getIdToken(),this.props.match.params.todoId)
+
+      const howMany = subscriptions.filter((sub) => sub.enrolled===true)
+
       this.setState({
-        subsSize: subscriptions.length
+        subsSize: howMany.length
       })
     } catch (e) {
       alert(`Failed to fetch subscriptions: ${e.message}`)
@@ -112,7 +115,7 @@ export class EditTodo extends React.PureComponent<
       <div>
         {this.state.uploadState === UploadState.FetchingPresignedUrl && <p>Uploading file metadata</p>}
         {this.state.uploadState === UploadState.UploadingFile && <p>Uploading file</p>}
-        {this.state.subsSize === 0 && <p>There are no subscriptions for this newsletter</p>}
+        {this.state.subsSize === 0 && <p>No subscriptions for newsletter found yet.</p>}
         {this.state.subsSize !== 0 && (
           <Button
             loading={this.state.uploadState !== UploadState.NoUpload}

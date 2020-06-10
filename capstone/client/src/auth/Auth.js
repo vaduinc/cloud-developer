@@ -1,11 +1,13 @@
 import auth0 from 'auth0-js';
 import { authConfig } from '../config';
+// import { getUserProfile } from '../api/todos-api';
+
 
 export default class Auth {
   accessToken;
   idToken;
   expiresAt;
-
+  
   auth0 = new auth0.WebAuth({
     domain: authConfig.domain,
     clientID: authConfig.clientId,
@@ -35,6 +37,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         console.log('Access token: ', authResult.accessToken)
         console.log('id token: ', authResult.idToken)
+        console.log('authResult: ', authResult)
         this.setSession(authResult);
       } else if (err) {
         this.history.replace('/');
@@ -55,6 +58,10 @@ export default class Auth {
   setSession(authResult) {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
+
+    // getUserProfile(authResult.idToken).then((userP) => {
+    //   this.userProfile = userP;
+    // })
 
     // Set the time that the access token will expire at
     let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
