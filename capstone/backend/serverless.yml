@@ -19,6 +19,15 @@ custom:
       - name: CreateProfileRequest
         contentType: application/json
         schema: ${file(models/save-profile-request.json)}
+      - name: PublishNewsletterRequest
+        contentType: application/json
+        schema: ${file(models/publish-newsletter-request.json)}
+      - name: CreateNewsletterRequest
+        contentType: application/json
+        schema: ${file(models/create-newsletter-request.json)}
+      - name: SubscribeToNewsletterRequest
+        contentType: application/json
+        schema: ${file(models/subscribe-to-newsletter-request.json)}
 
 # Add the serverless-webpack plugin
 plugins:
@@ -50,33 +59,6 @@ provider:
     REGION_SETUP: ${self:provider.region}
     KEY_DIVISION: '--'
     SOURCE_ACCOUNT: 'jaime.vadu@gmail.com'  # setup email account from where emails will be sent
-
-  # iamRoleStatements:
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:Query
-    #     - dynamodb:PutItem
-    #     - dynamodb:GetItem
-    #     - dynamodb:UpdateItem
-    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NEWSLETTER_TABLE}
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:Query
-    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NEWSLETTER_TABLE}/index/${self:provider.environment.INDEX_NAME}
-    # - Effect: Allow
-    #   Action:
-    #     - s3:PutObject
-    #   Resource: arn:aws:s3:::${self:provider.environment.ATTACH_S3_BUCKET}/*
-    # - Effect: "Allow"
-    #   Action:
-    #     - "ses:SendEmail"
-    #     - "ses:SendRawEmail"
-    #   Resource:
-    #     - "*"
-    #   Condition:
-    #     StringEquals:
-    #       ses:FromAddress:
-    #         - "jaime.vadu@gmail.com"
 
 functions:
 
@@ -139,6 +121,12 @@ functions:
           path: newsletters
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create newsletter
+            description: Create newsletter
+            requestModels:
+              'application/json': CreateNewsletterRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -221,6 +209,12 @@ functions:
           path: newsletters/subscription
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Subscribe 2 newsletter
+            description: Subscribe 2 newsletter
+            requestModels:
+              'application/json': SubscribeToNewsletterRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -343,6 +337,12 @@ functions:
           path: newsletters/publication
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Publish newsletter
+            description: send publication to subscribers
+            requestModels:
+              'application/json': PublishNewsletterRequest
     iamRoleStatements:
       - Effect: Allow
         Action:

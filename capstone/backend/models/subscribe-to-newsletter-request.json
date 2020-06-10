@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "subscribe 2 newsletter",
+    "type": "object",
+    "properties": {
+      "newsletterId": { "$ref": "#/definitions/non-empty-string" },
+      "enrolled": {
+        "type": "boolean"
+      }
+    },
+    "anyOf": [
+      { "required": ["newsletterId"] }
+    ],
+    "definitions": {
+        "non-empty-string": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "required": [
+      "enrolled"
+    ],
+    "additionalProperties": false
+}

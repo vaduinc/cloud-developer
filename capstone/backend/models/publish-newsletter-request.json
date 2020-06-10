@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "save newsletter",
+    "type": "object",
+    "properties": {
+      "shortDesc": { "$ref": "#/definitions/non-empty-string" },
+      "longDesc": { "$ref": "#/definitions/non-empty-string" }
+    },
+    "anyOf": [
+      { "required": ["shortDesc"] },
+      { "required": ["longDesc"] }
+    ],
+    "definitions": {
+        "non-empty-string": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "additionalProperties": false
+}
