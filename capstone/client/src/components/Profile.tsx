@@ -127,7 +127,8 @@ export class Profile extends React.PureComponent<
     return (
       <div>
         <Button
-            type="submit"
+          primary
+          type="submit"
           >
            SAVE
         </Button>

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
+import { History } from 'history'
 import { getUploadUrl, uploadFile, getSubscriptionsByNewsletterId } from '../api/api-layer'
 
 enum UploadState {
@@ -15,6 +16,7 @@ interface PublishNewsletterProps {
       newsletterId: string
     }
   }
+  history: History
   auth: Auth
 }
 
@@ -74,6 +76,7 @@ export class PublishNewsletter extends React.PureComponent<
       await uploadFile(uploadUrl, this.state.file)
 
       alert('File was uploaded!')
+      this.props.history.push(`/`)
     } catch (e) {
       alert('Could not upload a file: ' + e.message)
     } finally {
@@ -118,6 +121,7 @@ export class PublishNewsletter extends React.PureComponent<
         {this.state.subsSize === 0 && <p>No subscriptions for newsletter found yet.</p>}
         {this.state.subsSize !== 0 && (
           <Button
+            primary
             loading={this.state.uploadState !== UploadState.NoUpload}
             type="submit"
           >

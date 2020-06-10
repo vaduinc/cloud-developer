@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid, Divider } from 'semantic-ui-react'
+import { Grid, Divider, Loader, Checkbox } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { getReceivedUserPublicationsByNewsletterId } from '../api/api-layer'
 import { Publication } from '../types/Publication'
@@ -16,6 +16,7 @@ interface ReceivedPublicationsProps {
 
 interface ReceivedPublicationsState {
    publicationsReceived : Publication[]
+   loading: boolean
 }
 
 export class ReceivedPublications extends React.PureComponent<
@@ -23,7 +24,8 @@ export class ReceivedPublications extends React.PureComponent<
   ReceivedPublicationsState
 > {
   state: ReceivedPublicationsState = {
-    publicationsReceived :[]
+    publicationsReceived :[],
+    loading: true
   }
 
   async componentDidMount() {
@@ -31,7 +33,8 @@ export class ReceivedPublications extends React.PureComponent<
       const received =  await getReceivedUserPublicationsByNewsletterId(this.props.auth.getIdToken(),this.props.match.params.newsletterId)
 
       this.setState({
-        publicationsReceived :received
+        publicationsReceived :received,
+        loading: false
       })
   }
 
@@ -40,8 +43,26 @@ export class ReceivedPublications extends React.PureComponent<
       <div>
         <h1>Pubications Received</h1>
 
-        {this.renderNewslettersList()}
+        {this.renderNewsletters()}
       </div>
+    )
+  }
+
+  renderNewsletters() {
+    if (this.state.loading) {
+      return this.renderLoading()
+    }
+
+    return this.renderNewslettersList()
+  }
+
+  renderLoading() {
+    return (
+      <Grid.Row>
+        <Loader indeterminate active inline="centered">
+          Loading data...
+        </Loader>
+      </Grid.Row>
     )
   }
 
@@ -58,19 +79,16 @@ export class ReceivedPublications extends React.PureComponent<
           return (
             <Grid.Row key={newsl.publicationId}>
               <Grid.Column width={3} verticalAlign="middle">
-               hola
+                <Checkbox
+                  disabled
+                  checked={newsl.sent}
+                />
               </Grid.Column>
               <Grid.Column width={7} verticalAlign="middle">
                 {newsl.createdAt}
               </Grid.Column>
-              <Grid.Column width={3} floated="right">
+              <Grid.Column width={6} floated="right">
                 <a target="_blank" href={newsl.attachementURL}>Click here to see document</a>
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                
               </Grid.Column>
               <Grid.Column width={16}>
                 <Divider />

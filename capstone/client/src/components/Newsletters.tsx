@@ -10,7 +10,8 @@ import {
   Header,
   Icon,
   Input,
-  Loader
+  Loader,
+  Segment
 } from 'semantic-ui-react'
 
 import { createNewsletter, getAllNewsletters, getUserSubscriptions, subscribe2Newsletter, getUserProfile } from '../api/api-layer'
@@ -57,7 +58,7 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
     this.props.history.push(`/profile`)
   }
 
-  onNewsletterCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onNewsletterCreate = async () => {
     try {
       const newNewsletter = await createNewsletter(this.props.auth.getIdToken(), {
         shortDesc: this.state.newNewsletterTitle,
@@ -71,6 +72,7 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
         newNewsletterTitle: '',
         newNewsletterDescription: ''
       })
+      alert('Newsletter saved. Check the bottom of the list!')
     } catch {
       alert('Newsletter creation failed')
     }
@@ -162,28 +164,23 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
   renderCreateNewsletterInput() {
     return (
       <Grid.Row>
-        <Grid.Column width={6}>
-          <Input
-            action={{
-              color: 'teal',
-              labelPosition: 'left',
-              icon: 'add',
-              content: 'New Newsletter',
-              onClick: this.onNewsletterCreate
-            }}
-            fluid
-            actionPosition="left"
-            placeholder="title..."
-            onChange={this.handleShortDescChange}
-          />
-        </Grid.Column>
-        <Grid.Column width={8}>
-          <Input
-            fluid
-            actionPosition="left"
-            placeholder="description..."
-            onChange={this.handleLongDescChange}
-          />
+        <Grid.Column width={10}>
+          <Segment inverted>
+            <Input
+              fluid
+              actionPosition="left"
+              placeholder="title..."
+              onChange={this.handleShortDescChange}
+            />
+            <Input
+              fluid
+              actionPosition="left"
+              placeholder="description..."
+              onChange={this.handleLongDescChange}
+            />
+            <br></br>
+            <Button primary content='Add Newsletter' onClick={this.onNewsletterCreate} />
+          </Segment>
         </Grid.Column>
         <Grid.Column width={16}>
           <Divider />
