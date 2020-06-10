@@ -1,5 +1,6 @@
 import { apiEndpoint } from '../config'
 import { Newsletter } from '../types/Newsletter';
+import { Publication } from '../types/Publication';
 import { CreateNewsletterRequest } from '../types/CreateNewsletterRequest';
 import Axios from 'axios'
 import { Subscription } from '../types/Subscription';
@@ -9,10 +10,7 @@ export async function getAllNewsletters(idToken: string): Promise<Newsletter[]> 
   console.log('Fetching all newsletters')
 
   const response = await Axios.get(`${apiEndpoint}/newsletters/all`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    },
+    headers: getHeaders(idToken)
   })
   console.log('All Newsletters:', response.data)
   return response.data.data
@@ -23,10 +21,7 @@ export async function createNewsletter(
   newNewsletter: CreateNewsletterRequest
 ): Promise<Newsletter> {
   const response = await Axios.post(`${apiEndpoint}/newsletters`,  JSON.stringify(newNewsletter), {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.data
 }
@@ -39,14 +34,20 @@ export async function getUploadUrl(
     "newsletterId": newsletterId
   }
   const response = await Axios.post(`${apiEndpoint}/newsletters/publication`, newNewsletter, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.signedURL
 }
 
+export async function getReceivedUserPublicationsByNewsletterId(
+  idToken: string,
+  newsletterId: string
+): Promise<Publication[]> {
+  const response = await Axios.get(`${apiEndpoint}/newsletters/publication?newsletterId=${newsletterId}` ,{
+    headers: getHeaders(idToken)
+  })
+  return response.data.data
+}
 
 export async function getSubscriptionsByNewsletterId(
   idToken: string,
@@ -54,10 +55,7 @@ export async function getSubscriptionsByNewsletterId(
 ): Promise<Subscription[]> {
 
   const response = await Axios.get(`${apiEndpoint}/newsletters/${newsletterId}/subscription`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.data
 }
@@ -67,10 +65,7 @@ export async function getUserSubscriptions(
 ): Promise<Subscription[]> {
 
   const response = await Axios.get(`${apiEndpoint}/newsletters/subscription`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.data
 }
@@ -80,10 +75,7 @@ export async function getUserProfile(
 ): Promise<UserProfile> {
 
   const response = await Axios.get(`${apiEndpoint}/userprofile`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.data
 }
@@ -105,10 +97,7 @@ export async function subscribe2Newsletter(
   console.log(subs2news)
 
   const response = await Axios.post(`${apiEndpoint}/newsletters/subscription`,subs2news, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data.data
 }
@@ -126,10 +115,7 @@ export async function saveProfile(
     "email": email,
   }
   const response = await Axios.post(`${apiEndpoint}/userprofile`,profle, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
-    }
+    headers: getHeaders(idToken)
   })
   return response.data
 }
@@ -137,4 +123,12 @@ export async function saveProfile(
 
 export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
   await Axios.put(uploadUrl, file)
+}
+
+
+function getHeaders(idToken: string) {
+  return  {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${idToken}`
+  }
 }

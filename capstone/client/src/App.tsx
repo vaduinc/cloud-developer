@@ -8,6 +8,7 @@ import { Profile } from './components/Profile'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Newsletters } from './components/Newsletters'
+import { ReceivedPublications } from './components/ReceivedPublications'
 
 export interface AppProps {}
 
@@ -113,6 +114,14 @@ export default class App extends Component<AppProps, AppState> {
           exact
           render={props => {
             return <Profile {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/received/:newsletterId"
+          exact
+          render={props => {
+            return <ReceivedPublications {...props} auth={this.props.auth} />
           }}
         />
 

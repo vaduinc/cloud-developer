@@ -107,7 +107,7 @@ export class Profile extends React.PureComponent<
           </Form.Field>
 
           <Form.Field>
-            <label>Email - this will be used to send your notifications</label>
+            <label>Email - this will be used to send newsletters to you</label>
             <input
               type="text"
               placeholder="Email - use a valid email, so you can get the newsletters when they are published"

@@ -77,6 +77,7 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
   }
 
   onSentNewsletters = async (newsletterId: string | undefined) => {
+    this.props.history.push(`/received/${newsletterId}`)
 
   }
 
