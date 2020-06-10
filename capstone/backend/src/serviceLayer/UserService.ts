@@ -37,10 +37,16 @@ export async function saveUserProfile(CreateProfileRequest: CreateProfileRequest
  * 
  * @param newsletterId 
  */
-export async function getUserProfileByNewsletterId(newsletterId: string): Promise<UserProfile[]>{
+export async function getUserProfileByNewsletterId(newsletterId: string, includeOnlyEnrollActive: boolean): Promise<UserProfile[]>{
     
     const subscriptions = await getSubscriptionsByNewsletterId(newsletterId)
-    const usersId = await subscriptions.map( (sub) => {return sub.userId} )
+    let usersId =[]
+
+    if(includeOnlyEnrollActive){
+        usersId = await subscriptions.map( (sub) => {return sub.userId && sub.enrolled} )
+    }else{
+        usersId = await subscriptions.map( (sub) => {return sub.userId} )
+    }
   
     return await getUserProfilesById(usersId)
 }

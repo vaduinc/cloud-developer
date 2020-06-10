@@ -35,7 +35,7 @@ async function processS3Event(s3Event: S3Event) {
     logger.info(key)
 
     const newsletterId = key.split(KEY_DIVISION)
-    const usersProfiles = await getUserProfileByNewsletterId(newsletterId[0])
+    const usersProfiles = await getUserProfileByNewsletterId(newsletterId[0],true)
 
     logger.info(usersProfiles)
     

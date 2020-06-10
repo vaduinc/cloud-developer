@@ -8,8 +8,13 @@ const logger = createLogger ('Get-All-Pubications')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Processing event getUserPublications: ', event)
+
+  let newsletterId = null
+  if (event.queryStringParameters && event.queryStringParameters.newsletterId) {
+    newsletterId = event.queryStringParameters.newsletterId
+  }
   
-  const item = await getUserPublications(getUserId(event))
+  const item = await getUserPublications(getUserId(event),newsletterId)
 
   return {
     statusCode: 200,

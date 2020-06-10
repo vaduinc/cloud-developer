@@ -5,9 +5,16 @@ import * as uuid from 'uuid'
 
 const publicationDAO = new PublicationDAO()
 
-export async function getUserPublications(userId: string): Promise<Publication[]>{
+export async function getUserPublications(userId: string, newsletterId?: string): Promise<Publication[]>{
     
-    return await publicationDAO.getUserPublications(userId)
+    const rows =  await publicationDAO.getUserPublications(userId)
+
+    if (newsletterId){
+        return rows.filter((row) => row.newsletterId===newsletterId)
+    }else{
+        return rows 
+    }
+    
 }
 
 export async function getPublicationById(newsletterId: string, publicationId: string): Promise<Publication | {}>{

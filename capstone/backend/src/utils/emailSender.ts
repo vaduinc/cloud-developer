@@ -18,6 +18,11 @@ export async function send(userProfiles: UserProfile[] , content: string, subjec
     const emails = userProfiles.map((profile) => {
       return profile.email
     })
+
+    if(emails.length===0){
+      logger.info('no one was actively subscribed to newsletter')
+      return
+    }
   
     logger.info(emails)
   
