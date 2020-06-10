@@ -6,6 +6,9 @@
       "newsletterId": { "$ref": "#/definitions/non-empty-string" },
       "enrolled": {
         "type": "boolean"
+      },
+      "subscriptionId": {
+        "type": "string"
       }
     },
     "anyOf": [
