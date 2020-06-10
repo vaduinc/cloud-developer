@@ -1,11 +1,5 @@
 // TODO: Once your application is deployed, copy an API id here so that the frontend could interact with it
 
-// User: jaimetest@vaduinc.com		
-// Password: Jaimetest123
-
-// User: anotheruser@vaduinc.com
-// Password: Anotheruser123
-
 const apiId = 'ptimebxakl'
 export const apiEndpoint = `https://${apiId}.execute-api.us-east-1.amazonaws.com/dev`
 
