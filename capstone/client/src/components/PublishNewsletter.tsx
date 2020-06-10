@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile, getSubscriptionsByNewsletterId } from '../api/todos-api'
+import { getUploadUrl, uploadFile, getSubscriptionsByNewsletterId } from '../api/api-layer'
 
 enum UploadState {
   NoUpload,
@@ -9,26 +9,26 @@ enum UploadState {
   UploadingFile,
 }
 
-interface EditTodoProps {
+interface PublishNewsletterProps {
   match: {
     params: {
-      todoId: string
+      newsletterId: string
     }
   }
   auth: Auth
 }
 
-interface EditTodoState {
+interface PublishNewsletterState {
   file: any
   uploadState: UploadState
   subsSize: number
 }
 
-export class EditTodo extends React.PureComponent<
-  EditTodoProps,
-  EditTodoState
+export class PublishNewsletter extends React.PureComponent<
+  PublishNewsletterProps,
+  PublishNewsletterState
 > {
-  state: EditTodoState = {
+  state: PublishNewsletterState = {
     file: undefined,
     uploadState: UploadState.NoUpload,
     subsSize: 0
@@ -36,7 +36,7 @@ export class EditTodo extends React.PureComponent<
 
   async componentDidMount() {
     try {
-      const subscriptions = await getSubscriptionsByNewsletterId(this.props.auth.getIdToken(),this.props.match.params.todoId)
+      const subscriptions = await getSubscriptionsByNewsletterId(this.props.auth.getIdToken(),this.props.match.params.newsletterId)
 
       const howMany = subscriptions.filter((sub) => sub.enrolled===true)
 
@@ -68,7 +68,7 @@ export class EditTodo extends React.PureComponent<
       }
 
       this.setUploadState(UploadState.FetchingPresignedUrl)
-      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.todoId)
+      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.newsletterId)
 
       this.setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, this.state.file)

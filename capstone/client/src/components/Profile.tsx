@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
-import { saveProfile, getUserProfile } from '../api/todos-api'
+import { saveProfile, getUserProfile } from '../api/api-layer'
 
 enum UploadState {
   NoUpload,
@@ -10,22 +10,22 @@ enum UploadState {
   UploadingFile,
 }
 
-interface EditTodoProps {
+interface ProfileProps {
   auth: Auth
   history: History
 }
 
-interface EditTodoState {
+interface ProfileState {
   name: string
   last: string
   email: string
 }
 
 export class Profile extends React.PureComponent<
-  EditTodoProps,
-  EditTodoState
+  ProfileProps,
+  ProfileState
 > {
-  state: EditTodoState = {
+  state: ProfileState = {
     name: '',
     last: '',
     email: ''
@@ -63,21 +63,13 @@ export class Profile extends React.PureComponent<
         return
       }
 
-      const savedProfile = await saveProfile(this.props.auth.getIdToken(), this.state.name, this.state.last, this.state.email)
-
-      // this.setUploadState(UploadState.FetchingPresignedUrl)
-      // const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.todoId)
-
-      // this.setUploadState(UploadState.UploadingFile)
-      // await uploadFile(uploadUrl, this.state.name)
+      await saveProfile(this.props.auth.getIdToken(), this.state.name, this.state.last, this.state.email)
 
       alert('Profile saved!')
       this.props.history.push(`/`)
     } catch (e) {
       alert('Could not save Profile: ' + e.message)
-    } finally {
-      //this.setUploadState(UploadState.NoUpload)
-    }
+    } 
   }
 
   render() {
@@ -115,10 +107,10 @@ export class Profile extends React.PureComponent<
           </Form.Field>
 
           <Form.Field>
-            <label>Email</label>
+            <label>Email - this will be used to send your notifications</label>
             <input
               type="text"
-              placeholder="Email"
+              placeholder="Email - use a valid email, so you can get the newsletters when they are published"
               value={this.state.email}
               onChange={this.handleEmailChange}
             />

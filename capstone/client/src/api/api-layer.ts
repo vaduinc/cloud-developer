@@ -1,9 +1,7 @@
 import { apiEndpoint } from '../config'
 import { Newsletter } from '../types/Newsletter';
-import { CreateNewsletterRequest } from '../types/CreateTodoRequest';
+import { CreateNewsletterRequest } from '../types/CreateNewsletterRequest';
 import Axios from 'axios'
-import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
-import { Todos } from '../components/Todos';
 import { Subscription } from '../types/Subscription';
 import { UserProfile } from '../types/UserProfile';
 
@@ -16,15 +14,15 @@ export async function getAllNewsletters(idToken: string): Promise<Newsletter[]> 
       'Authorization': `Bearer ${idToken}`
     },
   })
-  console.log('Todos:', response.data)
+  console.log('All Newsletters:', response.data)
   return response.data.data
 }
 
 export async function createNewsletter(
   idToken: string,
-  newTodo: CreateNewsletterRequest
+  newNewsletter: CreateNewsletterRequest
 ): Promise<Newsletter> {
-  const response = await Axios.post(`${apiEndpoint}/newsletters`,  JSON.stringify(newTodo), {
+  const response = await Axios.post(`${apiEndpoint}/newsletters`,  JSON.stringify(newNewsletter), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -33,39 +31,12 @@ export async function createNewsletter(
   return response.data.data
 }
 
-export async function patchTodo(
-  idToken: string,
-  todoId: string,
-  updatedTodo: UpdateTodoRequest
-): Promise<void> {
-  // await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${idToken}`
-  //   }
-  // })
-  return new Promise(()=> "")
-}
-
-export async function deleteTodo(
-  idToken: string,
-  todoId: string
-): Promise<void> {
-  // await Axios.delete(`${apiEndpoint}/todos/${todoId}`, {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${idToken}`
-  //   }
-  // })
-  return new Promise(()=> "")
-}
-
 export async function getUploadUrl(
   idToken: string,
-  todoId: string
+  newsletterId: string
 ): Promise<string> {
   const newNewsletter = {
-    "newsletterId": todoId
+    "newsletterId": newsletterId
   }
   const response = await Axios.post(`${apiEndpoint}/newsletters/publication`, newNewsletter, {
     headers: {
@@ -79,10 +50,10 @@ export async function getUploadUrl(
 
 export async function getSubscriptionsByNewsletterId(
   idToken: string,
-  todoId: string
+  newsletterId: string
 ): Promise<Subscription[]> {
 
-  const response = await Axios.get(`${apiEndpoint}/newsletters/${todoId}/subscription`, {
+  const response = await Axios.get(`${apiEndpoint}/newsletters/${newsletterId}/subscription`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -120,13 +91,13 @@ export async function getUserProfile(
 
 export async function subscribe2Newsletter(
   idToken: string,
-  todoId: string | undefined,
+  newsletterId: string | undefined,
   enrolled: boolean,
   subscriptionId: string | undefined
 ): Promise<Subscription> {
 
   const subs2news = {
-    "newsletterId": todoId,
+    "newsletterId": newsletterId,
     "enrolled": enrolled,
     "subscriptionId": subscriptionId
   }

@@ -13,14 +13,13 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createNewsletter, deleteTodo, getAllNewsletters, patchTodo, getUserSubscriptions, subscribe2Newsletter, getUserProfile } from '../api/todos-api'
+import { createNewsletter, getAllNewsletters, getUserSubscriptions, subscribe2Newsletter, getUserProfile } from '../api/api-layer'
 import Auth from '../auth/Auth'
 import { Newsletter } from '../types/Newsletter'
-import { parseUserId } from '../auth/utils'
 import { Subscription } from '../types/Subscription'
 import { UserProfile } from '../types/UserProfile'
 
-interface TodosProps {
+interface NewslettersProps {
   auth: Auth
   history: History
 }
@@ -33,7 +32,7 @@ interface NewsletterState {
   currentUser: UserProfile | null
 }
 
-export class Todos extends React.PureComponent<TodosProps, NewsletterState> {
+export class Newsletters extends React.PureComponent<NewslettersProps, NewsletterState> {
   state: NewsletterState = {
     newsletters: [],
     newNewsletterTitle: '',
@@ -51,7 +50,7 @@ export class Todos extends React.PureComponent<TodosProps, NewsletterState> {
   }
 
   onPublishButtonClick = (newsletterId: string | undefined) => {
-    this.props.history.push(`/todos/${newsletterId}/edit`)
+    this.props.history.push(`/newsletter/${newsletterId}/publish`)
   }
 
   onProfileClick = () => {
@@ -73,19 +72,12 @@ export class Todos extends React.PureComponent<TodosProps, NewsletterState> {
         newNewsletterDescription: ''
       })
     } catch {
-      alert('Todo creation failed')
+      alert('Newsletter creation failed')
     }
   }
 
-  onTodoDelete = async (todoId: string | undefined) => {
-    // try {
-    //   await deleteTodo(this.props.auth.getIdToken(), todoId)
-    //   this.setState({
-    //     todos: this.state.todos.filter(todo => todo.todoId != todoId)
-    //   })
-    // } catch {
-    //   alert('Todo deletion failed')
-    // }
+  onSentNewsletters = async (newsletterId: string | undefined) => {
+
   }
 
   onSubscribeCheck = async (pos: number) => {
@@ -125,7 +117,6 @@ export class Todos extends React.PureComponent<TodosProps, NewsletterState> {
   async mergeData(newsletters: Newsletter[], userSubscriptions: Subscription[], currentUserId: string): Promise<Newsletter[]>{
     return newsletters.map((newsletter) => {
         const mysubs = userSubscriptions.filter((subs) => subs.newsletterId === newsletter.newsletterId)
-        //console.log(mysubs)
 
         let enrolled = false
         let subsid = undefined
@@ -268,7 +259,7 @@ export class Todos extends React.PureComponent<TodosProps, NewsletterState> {
                 <Button
                   icon
                   color="yellow"
-                  onClick={() => this.onTodoDelete(newsl.newsletterId)}
+                  onClick={() => this.onSentNewsletters(newsl.newsletterId)}
                 >
                   <Icon name="numbered list" />
                 </Button>
