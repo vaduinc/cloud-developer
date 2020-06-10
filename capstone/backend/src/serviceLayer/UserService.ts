@@ -5,14 +5,14 @@ import { getSubscriptionsByNewsletterId } from './SubscriptionService'
 
 const userDAO = new UserDAO()
 
-export async function getUserProfile(userId: string): Promise<UserProfile>{
+export async function getUserProfile(userId: string): Promise<UserProfile | {}>{
     
     return await userDAO.getUserProfile(userId)
 }
 
 export async function saveUserProfile(CreateProfileRequest: CreateProfileRequest, userId: string): Promise<UserProfile>{
     
-    const userProfile = userDAO.getUserProfile
+    const userProfile = userDAO.getUserProfile(userId)
 
     if (userProfile) {
         return await userDAO.updateUserProfile({

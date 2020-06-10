@@ -19,7 +19,7 @@ export class UserDAO {
         ) {
     }
 
-    async getUserProfile (userId: string): Promise<UserProfile>{
+    async getUserProfile (userId: string): Promise<UserProfile | {}>{
 
       logger.info('Getting getUserProfile ' + userId)
 
@@ -33,6 +33,10 @@ export class UserDAO {
       })
       .promise()
 
+      if (!result.Item){
+        return {}
+      }
+
       return {
               userId: userId,
               name: result.Item.name, 
@@ -44,7 +48,7 @@ export class UserDAO {
 
     async createUserProfile (userProfile: UserProfile): Promise<UserProfile> {
 
-      logger.info('Getting getUserProfile ' + userProfile)
+      logger.info('Create User Profile ' + JSON.stringify(userProfile))
       
       const newItem = {
         PK: `${PK}${userProfile.userId}`,
@@ -65,7 +69,7 @@ export class UserDAO {
 
     async updateUserProfile (userProfile: UserProfile): Promise<UserProfile> {
       
-      logger.info('Getting updateUserProfile ' + userProfile)
+      logger.info('Getting updateUserProfile ' + JSON.stringify(userProfile))
 
       await this.docClient.update({
         TableName: this.newsletterTable,

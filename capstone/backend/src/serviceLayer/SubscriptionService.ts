@@ -1,5 +1,5 @@
 import { Subscription } from '../models/Subscription'
-import { CreateSubscriptionRequest } from '../requests/CreateSubscriptionRequest'
+import { SaveSubscriptionRequest } from '../requests/SaveSubscriptionRequest'
 import { SubscriptionDAO } from '../dataLayer/SubscriptionDAO'
 import * as uuid from 'uuid'
 
@@ -16,13 +16,13 @@ export async function getSubscriptionsByNewsletterId(newsletterId: string): Prom
 }
 
 
-export async function saveSubscription(createSubscriptionRequest: CreateSubscriptionRequest, userId: string): Promise<Subscription>{
+export async function saveSubscription(saveSubscriptionRequest: SaveSubscriptionRequest, userId: string): Promise<Subscription>{
     
         return await subscriptionDAO.createSubscription({
             userId: userId,
-            newsletterId: createSubscriptionRequest.newsletterId,
-            enrolled: true,
-            subscriptionId: uuid.v4()
+            newsletterId: saveSubscriptionRequest.newsletterId,
+            enrolled: saveSubscriptionRequest.enrolled,
+            subscriptionId: saveSubscriptionRequest.subscriptionId?saveSubscriptionRequest.subscriptionId:uuid.v4()
         })
     
 }

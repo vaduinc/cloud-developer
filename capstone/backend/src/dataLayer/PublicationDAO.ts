@@ -97,7 +97,7 @@ export class PublicationDAO {
 
     async createPublication (publication: Publication): Promise<Publication> {
 
-      logger.info(`createPublication ${publication}`)
+      logger.info('createPublication ' + JSON.stringify(publication))
 
       const attachmentUrl: string = 'https://' + this.bucketName + '.s3.amazonaws.com/' + publication.newsletterId +KEY_DIVISION+ publication.publicationId
       const creationDate = new Date().toISOString()

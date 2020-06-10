@@ -77,13 +77,13 @@ export class SubscriptionDAO {
 
     async createSubscription (subscription: Subscription): Promise<Subscription> {
 
-      logger.info('createSubscription ' + subscription)
+      logger.info('createSubscription ' + JSON.stringify(subscription))
       
       const newItem = {
         PK: `${NEWSLETTER_KEY}${subscription.newsletterId}`,
         SK: `${SUBSCRIPTION_KEY}${subscription.subscriptionId}`,
         GSI: `${USER_KEY}${subscription.userId}`,
-        enrolled: true
+        enrolled: subscription.enrolled
       }
     
       await this.docClient.put({

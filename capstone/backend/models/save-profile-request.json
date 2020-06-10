@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "save profile",
+    "type": "object",
+    "properties": {
+      "name": { "$ref": "#/definitions/non-empty-string" },
+      "last": { "$ref": "#/definitions/non-empty-string" },
+      "email": { "$ref": "#/definitions/non-empty-string" }
+    },
+    "anyOf": [
+      { "required": ["name"] },
+      { "required": ["last"] },
+      { "required": ["email"] }
+    ],
+    "definitions": {
+        "non-empty-string": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "additionalProperties": false
+}

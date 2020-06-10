@@ -89,7 +89,7 @@ export class NewsletterDAO {
      */
     async createNewsletter (newsletter: Newsletter): Promise<Newsletter> {
 
-      logger.info('createNewsletter ' + newsletter)
+      logger.info('createNewsletter ' + JSON.stringify(newsletter))
       
       const newItem = {
         PK: `${USER_KEY}${newsletter.userId}`,
