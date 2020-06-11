@@ -1,0 +1,443 @@
+{
+	"info": {
+		"_postman_id": "1d8e9c79-9f0f-4f8f-ae65-fd0c0ebe800e",
+		"name": "Udacity Capstone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "NEWSLETTERs",
+			"item": [
+				{
+					"name": "Get User Newletters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Newletters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/all",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/userprofile",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"userprofile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/subscription",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Received User Publications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/publication",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"publication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Publication BY ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/f6bb8945-0465-48fa-8322-622b3249b79e/publication/cadaebb7-9c1c-430d-8904-aec2ef996fad",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"f6bb8945-0465-48fa-8322-622b3249b79e",
+								"publication",
+								"cadaebb7-9c1c-430d-8904-aec2ef996fad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscriptions by Newsletter ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/077cd172-9798-4453-a833-6b9ca7a16b09/subscription",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"077cd172-9798-4453-a833-6b9ca7a16b09",
+								"subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Segundo\",\n\t\"last\": \"User\",\n\t\"email\": \"jaime.vadu@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/userprofile",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"userprofile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe 2 Newsletter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"newsletterId\": \"644645e1-637f-4ffc-9d1d-d4efa11f50b9\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/subscription",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish Newsletter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"newsletterId\": \"644645e1-637f-4ffc-9d1d-d4efa11f50b9\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters/publication",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters",
+								"publication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Newsletter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"shortDesc\": \"New NewsL\",\n\t\"longDesc\": \"My news letter about nothing\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/newsletters",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"newsletters"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4a375b9e-e477-4481-972e-f2d3dcd18d18",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "44e98694-36d8-477a-a989-cc1a0dc8233f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6a826214-cd92-490a-ac66-d6141bc6193f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0e2063bb-934c-4c26-8dcc-75222968041e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "1711341c-d265-404d-bb4e-ef0a2fb7e686",
+			"key": "apiId",
+			"value": "ptimebxakl",
+			"type": "string"
+		},
+		{
+			"id": "e8deebf3-3957-4a47-9010-eec465ea81bf",
+			"key": "authToken",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZsd1laQnhqREZ0djRLeDVYQWRtVyJ9.eyJpc3MiOiJodHRwczovL2Rldi0xa2puZTFrei5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWVjY2EzYTAwMTRjODEwYzVhNzY2OTAyIiwiYXVkIjoiUzVENDRJbHQyR2U0czU3cmhhYVpVbU15Tlo2clJpd1EiLCJpYXQiOjE1OTA3NjY3MzksImV4cCI6MTU5MTIwMjczOSwiYXRfaGFzaCI6IkszSWxra2xUUXpLQk01NXo1Y0VoSXciLCJub25jZSI6IlRlTW5wN3hkb0dVbHh4R2pHVHVuMXFITC02dDJ2dnY2In0.PUAEq2sD25lpz8de4GZ9t3642i4GvPIZkAN7RAlZ_Gr49Oj82QG95DKIrvJqUTygTsl6oZ9lB79f8nc3NAyYF7r2oVkr-NSxYMapjk382BLAgQHsjd5CvEffQy5hIvMeuPoUKu8n3gPFv-gpzaJDx2FKT93WP4RNni4JUDQDLj7CQsHF3Zmt_MCkgDiTEKrnXrcHoOlh9N7eXuzWOALBj-C4cVkrZj_qXV-dYJCkYwO89gnkp2CoVnAC4VehuFXg9XrbFwL-9PZFrLxtuUey_-zYd00dt6bzAFhYFQlJ9YU3F23e1LE60buVv-nx3Lesgu3igGzWoOX0CLKvuwAXGQ",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
