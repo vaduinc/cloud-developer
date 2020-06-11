@@ -3,6 +3,7 @@ import 'source-map-support/register'
 import { createLogger } from '../../utils/logger'
 import { send } from '../../utils/emailSender'
 import { getUserProfileByNewsletterId } from '../../serviceLayer/UserService'
+import { updatePublicationStatus } from '../../serviceLayer/PublicationService'
 
 const logger = createLogger ('S3-Event-Publish')
 const KEY_DIVISION =process.env.KEY_DIVISION
@@ -34,12 +35,18 @@ async function processS3Event(s3Event: S3Event) {
     const key = record.s3.object.key
     logger.info(key)
 
-    const newsletterId = key.split(KEY_DIVISION)
-    const usersProfiles = await getUserProfileByNewsletterId(newsletterId[0],true)
+    const attachmentName = key.split(KEY_DIVISION)
+    const usersProfiles = await getUserProfileByNewsletterId(attachmentName[0],true)
 
     logger.info(usersProfiles)
     
-    await send(usersProfiles, prepareMessage(key), 'Capstone Newsletter')
+    const sendResponse = await send(usersProfiles, prepareMessage(key), 'Capstone Newsletter')
+
+    logger.info(sendResponse)
+    
+    if (JSON.stringify(sendResponse).indexOf("errorType") !== 0) {
+      await updatePublicationStatus(attachmentName[0],attachmentName[1], true)
+    }
   }
 }
 

@@ -94,6 +94,27 @@ export class PublicationDAO {
      
     }
 
+    async updatePublicationStatus (newsletterId: string, publicationId: string, sentStatus: boolean): Promise<void> {
+      
+      logger.info('Update publication ' + newsletterId + ' : ' + publicationId)
+
+      await this.docClient.update({
+        TableName: this.newsletterTable,
+        Key:{
+          'PK': `${NEWSLETTER_KEY}${newsletterId}`,
+          'SK': `${PUBLICATION_KEY}${publicationId}`
+        },
+        UpdateExpression: "set #s = :sentStatus",
+        ExpressionAttributeValues: {
+          ":sentStatus" : sentStatus
+        },
+        ExpressionAttributeNames: {
+          "#s" : "sent"
+        },
+        ReturnValues: "UPDATED_NEW"
+      }).promise()
+    }
+
 
     async createPublication (publication: Publication): Promise<Publication> {
 

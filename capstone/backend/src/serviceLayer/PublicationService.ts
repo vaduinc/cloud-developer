@@ -22,6 +22,11 @@ export async function getPublicationById(newsletterId: string, publicationId: st
     return await publicationDAO.getPublicationById(newsletterId, publicationId)
 }
 
+export async function updatePublicationStatus(newsletterId: string, publicationId: string, sentStatus: boolean): Promise<void>{
+    
+    await publicationDAO.updatePublicationStatus(newsletterId, publicationId, sentStatus)
+}
+
 export async function publishNewsletter(createPublicationRequest: CreatePublicationRequest, userId: string): Promise<Publication>{
     
     return await publicationDAO.createPublication({

@@ -43,7 +43,6 @@ export async function send(userProfiles: UserProfile[] , content: string, subjec
       Source: SOURCE_ACCOUNT
     }
   
-    const response = await ses.sendEmail(params).promise()
-    logger.info(response)
+    return await ses.sendEmail(params).promise()
   
   }
