@@ -85,15 +85,19 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
 
   onSubscribeCheck = async (pos: number) => {
     try {
+      this.setState({ loadingNewsletters: true })
       const newsletter = this.state.newsletters[pos]
       const subscription = await subscribe2Newsletter(this.props.auth.getIdToken(), newsletter.newsletterId, !newsletter.subscribed, newsletter.subscriptionId)
       this.setState({
         newsletters: update(this.state.newsletters, {
           [pos]: { subscribed: { $set: subscription.enrolled }, subscriptionId: { $set: subscription.subscriptionId }  }
-        })
+        }),
+        loadingNewsletters: false
       })
     } catch {
       alert('Newsletter subscription failed')
+    } finally {
+      this.setState({ loadingNewsletters: false })
     }
   }
 
@@ -144,10 +148,10 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
   render() {
     return (
       <div>
-        <Header as="h1">NEWSLETTERS</Header>
+      <Header as="h1">NEWSLETTERS - {this.state.currentUser?this.state.currentUser.name:''}</Header>
         {(this.state.currentUser!== null &&  (!this.state.currentUser.email || this.state.currentUser.email==="")) && (
           <h1>
-            YOU NEED TO SET UP AND EMAIL IF YOU WANT TO SUBSCRIBE TO ANY NEWSLETTERS. 
+            YOU NEED TO SET UP AN EMAIL IF YOU WANT TO SUBSCRIBE TO ANY NEWSLETTER. 
             Click the icon to set up the profile {this.renderProfile()} <br></br>
             You still will be able to create and publish newsletters without setting up
             and email though. 
@@ -213,7 +217,7 @@ export class Newsletters extends React.PureComponent<NewslettersProps, Newslette
     return (
       <Grid.Row>
         <Loader indeterminate active inline="centered">
-          Loading NEWSLETTERs
+          ... working
         </Loader>
       </Grid.Row>
     )

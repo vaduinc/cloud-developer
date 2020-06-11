@@ -79,7 +79,7 @@ export class Profile extends React.PureComponent<
 
         {((!this.state.email || this.state.email==="")) && (
           <h1>
-            YOU NEED TO SET UP AND EMAIL IF YOU WANT TO SUBSCRIBE TO ANY NEWSLETTERS.
+            YOU NEED TO SET UP AN EMAIL IF YOU WANT TO SUBSCRIBE TO NEWSLETTERS.
             You still will be able to create and publish newsletters without setting up
             and email though.
           </h1>
