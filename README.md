@@ -7,3 +7,5 @@ content for Udacity's cloud developer nanodegree
 - Project 3 documentation `udacity-jaime-valencia-p3.pdf`
 
 - Project 4 documentation `udacity-jaime-valencia-p4.pdf`
+
+- Capstone documentation `udacity-jaime-valencia-capstone.pdf`
